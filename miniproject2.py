@@ -11,6 +11,14 @@ class SistemPendaftaranLowongan:
         self.admin_username = "admin"
         self.admin_password = "sistem informasi"
 
+    def __len__(self):
+        count = 0
+        current = self.head
+        while current:
+            count += 1
+            current = current.next
+        return count
+
     def tambah_pelamar(self, nama, email, telepon, pengalaman, keahlian, lowongan, posisi="akhir"):
         new_node = Node({
             "nama": nama,
@@ -39,7 +47,8 @@ class SistemPendaftaranLowongan:
                 current = current.next
             new_node.next = current.next
             new_node.prev = current
-            current.next.prev = new_node
+            if current.next:
+                current.next.prev = new_node
             current.next = new_node
         else:
             if self.head is None:
@@ -50,28 +59,36 @@ class SistemPendaftaranLowongan:
                 new_node.prev = self.tail
                 self.tail = new_node
 
-    def hapus_pelamar_admin(self):
-        print("\nPilih posisi untuk menghapus pelamar:")
-        print("1. Hapus di awal")
-        print("2. Hapus di tengah")
-        print("3. Hapus di akhir")
-        posisi = input("Masukkan nomor posisi: ")
-        if posisi == "1":
-        self.hapus_pelamar(0)
-        elif posisi == "2":
-        idx = int(input("\nMasukkan nomor indeks pelamar yang ingin dihapus: ")) - 1
-        self.hapus_pelamar(idx)
-        elif posisi == "3":
-        # Untuk menghapus di akhir, cari indeks terakhir dan panggil hapus_pelamar
-        self.hapus_pelamar(len(self) - 1)
-    else:
-        print("Pilihan tidak valid.!!!!!!")
-
-
+    def hapus_pelamar(self, idx):
+        if 0 <= idx < len(self):
+            current = self.head
+            if idx == 0:  # Jika node pertama yang akan dihapus
+                if self.head.next:  # Jika masih ada node lain setelahnya
+                    self.head = self.head.next
+                    self.head.prev = None
+                else:  # Jika ini adalah satu-satunya node dalam linked list
+                    self.head = None
+                    self.tail = None
+            elif idx == len(self) - 1:  # Jika node terakhir yang akan dihapus
+                current = self.tail
+                self.tail = self.tail.prev
+                self.tail.next = None
+            else:  # Jika node di tengah yang akan dihapus
+                for _ in range(idx):
+                    current = current.next
+                current.prev.next = current.next
+                current.next.prev = current.prev
+            print("___________________________________________________________")
+            print(f"Data pelamar dengan nomor indeks {idx+1} berhasil dihapus.")
+            print("___________________________________________________________")
+        else:
+            print("Nomor indeks tidak valid.!!!")
 
     def tampilkan_pelamar(self):
         if not self.head:
-            print("Tidak ada data pelamar yang tersedia.")
+            print("||||||||||||||||||||||||||||||||||||||||||||||||")
+            print("||||||Tidak ada data pelamar yang tersedia.|||||")
+            print("||||||||||||||||||||||||||||||||||||||||||||||||")
         else:
             print("\nData Pelamar:")
             current = self.head
@@ -103,7 +120,9 @@ class SistemPendaftaranLowongan:
         elif posisi == "3":
             self.daftar_sebagai_pelamar("akhir")
         else:
-            print("Pilihan tidak valid.!!!!")
+            print("||||||||||||||||||||||||||||||||||")
+            print("|||||Pilihan tidak valid.!!!!|||||")
+            print("||||||||||||||||||||||||||||||||||")
 
     def hapus_pelamar_admin(self):
         print("\nPilih posisi untuk menghapus pelamar:")
@@ -117,9 +136,11 @@ class SistemPendaftaranLowongan:
             idx = int(input("\nMasukkan nomor indeks pelamar yang ingin dihapus: ")) - 1
             self.hapus_pelamar(idx)
         elif posisi == "3":
-            self.hapus_pelamar(-1)
+            self.hapus_pelamar(len(self) - 1)  # hapus node terakhir
         else:
-            print("Pilihan tidak valid.!!!!!")
+            print("||||||||||||||||||||||||||||||||||")
+            print("|||||Pilihan tidak valid.!!!!!||||")
+            print("||||||||||||||||||||||||||||||||||")
 
     def update_pelamar_admin(self):
         idx = int(input("Masukkan nomor indeks pelamar yang ingin diupdate: ")) - 1
@@ -141,9 +162,13 @@ class SistemPendaftaranLowongan:
                 "keahlian": keahlian,
                 "lowongan": lowongan
             }
+            print("________________________________")
             print("Data pelamar berhasil diupdate.")
+            print("________________________________")
         else:
-            print("Nomor indeks tidak valid.!!!!!")
+            print("|||||||||||||||||||||||||||||||||||||||")
+            print("|||||Nomor indeks tidak valid.!!!!!||||")
+            print("|||||||||||||||||||||||||||||||||||||||")
 
     def crud_admin(self):
         username = input("Masukkan username: ")
@@ -184,4 +209,6 @@ if __name__ == "__main__":
         elif peran.lower() == "pelamar":
             sistem_pendaftaran.daftar_sebagai_pelamar()
         else:
-            print("Pilihan tidak valid.!!!!!!")
+            print("||||||||||||||||||||||||||||||||||")
+            print("|||||Pilihan tidak valid.!!!!|||||")
+            print("||||||||||||||||||||||||||||||||||")
