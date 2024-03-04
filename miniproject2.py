@@ -50,22 +50,24 @@ class SistemPendaftaranLowongan:
                 new_node.prev = self.tail
                 self.tail = new_node
 
-    def hapus_pelamar(self, idx):
-        if 0 <= idx < len(self):
-            current = self.head
-            for _ in range(idx):
-                current = current.next
-            if current.prev:
-                current.prev.next = current.next
-            else:
-                self.head = current.next
-            if current.next:
-                current.next.prev = current.prev
-            else:
-                self.tail = current.prev
-            print(f"Data pelamar dengan nomor indeks {idx+1} berhasil dihapus.")
-        else:
-            print("Nomor indeks tidak valid.!!!")
+    def hapus_pelamar_admin(self):
+        print("\nPilih posisi untuk menghapus pelamar:")
+        print("1. Hapus di awal")
+        print("2. Hapus di tengah")
+        print("3. Hapus di akhir")
+        posisi = input("Masukkan nomor posisi: ")
+        if posisi == "1":
+        self.hapus_pelamar(0)
+        elif posisi == "2":
+        idx = int(input("\nMasukkan nomor indeks pelamar yang ingin dihapus: ")) - 1
+        self.hapus_pelamar(idx)
+        elif posisi == "3":
+        # Untuk menghapus di akhir, cari indeks terakhir dan panggil hapus_pelamar
+        self.hapus_pelamar(len(self) - 1)
+    else:
+        print("Pilihan tidak valid.!!!!!!")
+
+
 
     def tampilkan_pelamar(self):
         if not self.head:
